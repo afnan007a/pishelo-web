@@ -2814,6 +2814,11 @@
   "resolved" "https://registry.npmjs.org/slash/-/slash-3.0.0.tgz"
   "version" "3.0.0"
 
+"smoothfade@^1.1.1":
+  "integrity" "sha512-Fkk0JS7x5bnUqKFhsbYAvYMCD5wOfVuWhM6ohP3FWPSJVZNySY5pJczIGyOiAQX0YYW3xYDTJHXOmLA8YnpCRw=="
+  "resolved" "https://registry.npmjs.org/smoothfade/-/smoothfade-1.1.1.tgz"
+  "version" "1.1.1"
+
 "source-list-map@^2.0.1":
   "integrity" "sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw=="
   "resolved" "https://registry.npmjs.org/source-list-map/-/source-list-map-2.0.1.tgz"
