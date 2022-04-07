@@ -20,3 +20,14 @@ model Songs {
   name       String?
   artists    String[]  @db.Uuid
 }
+
+model Users {
+  id              String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  created_at      DateTime? @default(now()) @db.Timestamptz(6)
+  username        String?
+  discriminator   String?
+  activityMessage String?
+  status          String    @default("online")
+  userid          String?   @unique @db.Uuid
+  lastseen        String
+}

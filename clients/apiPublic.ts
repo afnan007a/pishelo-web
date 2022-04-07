@@ -1,7 +1,7 @@
 import { serverAddress } from "@/constants/development";
 import { supabase } from "@/clients/supabasePublic";
 import querystring from "querystring";
-// import type { Users, Songs, Beatmaps } from "@prisma/client";
+import type { Users } from "@prisma/client";
 import { logIt } from ".";
 
 async function apifetch(
@@ -144,7 +144,7 @@ export async function checkIfAuth(): Promise<any> {
   }
 }
 
-export const userSignup = async({ email, password, username }) => {
+export const userSignup = async({ email, password, username }):Promise<any> => {
   return new Promise(async (res, rej) => {
     const dt = await apifetch("/auth/signup", {
       method: "POST",
@@ -161,7 +161,7 @@ export const userSignup = async({ email, password, username }) => {
   });
 }
 
-export const userData = async(): Promise<unknown> => {
+export const userData = async (): Promise<Users> => {
   return new Promise(async (res, rej) => {
     const dt = await apifetch("/user/me", {
       method: "GET",
@@ -171,4 +171,4 @@ export const userData = async(): Promise<unknown> => {
     });
     res(dt);
   });
-}
+};

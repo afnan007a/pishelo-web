@@ -1,4 +1,4 @@
-
+import type { Users } from "@prisma/client";
 export interface dataPropType {
     spotifyPlayer: {
         state: Spotify.Player | null,
@@ -7,5 +7,9 @@ export interface dataPropType {
     currentContext: {
         state: Spotify.PlaybackState | null,
         stateSetter: (state: Spotify.PlaybackState | null) => void
+    },
+    userData: {
+        state: Users | null,
+        stateSetter: (state: Users | null) => void
     }
 }
