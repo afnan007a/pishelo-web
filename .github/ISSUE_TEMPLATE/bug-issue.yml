@@ -39,6 +39,37 @@ body:
       placeholder: Drag and drop the screenshots/videos into this box.
     validations:
       required: false
+  - type: input
+    attributes:
+      label: Client Version
+      description: The version you encountered this bug on. This is shown at the bottom left of the settings page.
+    validations:
+      required: true
+    - type: markdown
+    attributes:
+      value: |
+        ## Logs
+
+        Attaching log files is required for every reported bug. See instructions below on how to find them.
+
+        **Logs are created when you reopen/refresh the app. Last 5 previous versions of the logs are stored for easier access.**
+
+        ### Web Client Platform
+
+        If the app is able to launch normally:
+          1. Head on to app settings and under the developer section
+          2. Click on the "Support" button, and click on "Copy debug log to clipboard"
+
+        If the app is unable to launch at all:
+          1. Visit the [Pishelo Debug Area](https://pishelo.vercel.app/debug)
+          1. Open the developer tools on your browser (usually with `cmd+option+i` for mac and `ctrl+option+i` for windows)
+          2. Locate the developer tool panel and select the "Application" category (use expand arrow button if there is no application category)
+          3. Select `Local Storage` under Storage, expand it and select "https://pishelo.vercel.app" (usually the first and only one)
+          4. Find the `debugLogs` column and copy all its value
+
+        ---
+
+        Paste all debug information from the clipboard and paste it into the "Logs" box below.
   - type: textarea
     attributes:
       label: Logs
