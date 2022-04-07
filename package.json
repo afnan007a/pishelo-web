@@ -6,13 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dp": "npx prisma db pull && npx prisma generate",
+    "ci:deploy": "npm run dp && npm run build"
   },
   "dependencies": {
+    "@prisma/client": "^3.12.0",
+    "@supabase/supabase-js": "^1.33.3",
     "@types/spotify-web-playback-sdk": "^0.1.12",
     "css-loader": "^2.1.1",
     "framer-motion": "^6.2.9",
     "next": "12.1.4",
+    "qrcode": "^1.5.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "spotify-web-api-js": "^1.5.2",
@@ -21,6 +26,7 @@
   },
   "devDependencies": {
     "@types/node": "17.0.23",
+    "@types/qrcode": "^1.4.2",
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
     "autoprefixer": "^10.4.4",
