@@ -39,17 +39,10 @@ body:
       description: The version you encountered this bug on. This is shown at the bottom left of the settings page.
     validations:
       required: true
-  - type: textarea
-    attributes:
-      label: Debug Information
-      description: Debug Logs can be found at [Pishelo Web Settings](https://pishelo.vercel.app/app/settings/developer/debug-logs)
-    validations:
-      required: false
-    - type: markdown
+  - type: markdown
     attributes:
       value: |
         ## Logs
-
         Attaching log files is required for every reported bug. See instructions below on how to find them.
 
         **Logs are created when you reopen/refresh the app. Last 5 previous versions of the logs are stored for easier access.**
@@ -70,9 +63,10 @@ body:
         ---
 
         Paste all debug information from the clipboard and paste it into the "Logs" box below.
+
   - type: textarea
     attributes:
       label: Logs
-      placeholder: Drag and drop the log files into this box.
+      placeholder: Paste all debug information from the clipboard and paste it into this box.
     validations:
       required: true
