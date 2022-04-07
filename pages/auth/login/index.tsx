@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { checkIfAuth } from '@/clients/apiPublic'
 import qrCode from 'qrcode'
 
-const App = ({ dataProps }: { dataProps: dataPropType }) => {
+const App = ({ dataProps }) => {
 
     const loginDialogAnimationControl = useAnimation()
     const router = useRouter()
@@ -28,23 +28,24 @@ const App = ({ dataProps }: { dataProps: dataPropType }) => {
             <div className={`bg-[#242424] transition-all md:bg-transparent`}>
                 <img id="backgroundImage" className={`-z-10 absolute w-screen h-screen object-cover`} src={`/assets/authBgImage.jpg`} />
 
-                <div className={`w-full fixed h-20 text-white flex items-center px-7`}>
+                {/* <div className={`w-full fixed h-20 text-white flex items-center px-7`}>
                     <h1 className={`text-3xl font-black`}>Pishelo</h1>
-                </div>
+                </div> */}
 
-                <div className={`w-full min-h-screen h-full flex items-center transition-all md:justify-center md:px-20`}>
+                <div className={`w-full min-h-screen h-full flex pt-14 md:pt-0 md:items-center transition-all md:justify-center md:px-16`}>
                     <motion.div
                         animate={loginDialogAnimationControl}
                         initial={{ translateY: -100, opacity: 0 }}
-                    className={`md:bg-[#242424] text-white w-full h-full md:w-[850px] rounded-2xl md:shadow-xl py-5 px-5 flex items-center`}
+                        transition={{ ease: 'easeOut', duration: 0.3 }}
+                    className={`md:bg-[#242424] text-white w-full h-full transition-all md:w-[650px] lg:w-[850px] rounded-2xl md:shadow-xl py-5 px-5 flex items-center`}
                     >
                         <div className={`w-full`}>
-                            <h1 className={`font-bold text-xl`}>{`Welcome back! 👋`}</h1>
+                            <h1 className={`font-bold text-2xl`}>{`Welcome back! 👋`}</h1>
                             <h3 className={`text-sm text-gray-400`}>Sign into Pishelo</h3>
 
                             <div className={`mt-7 space-y-3`}>
                                 <div id="emailForm">
-                                    <h1 className={`text-gray-300 text-sm`}>Email</h1>
+                                    <h1 className={`text-gray-300 text-sm`}>Email Address</h1>
                                     <input 
                                         placeholder="Enter your email."
                                         type={`email`}
@@ -63,7 +64,7 @@ const App = ({ dataProps }: { dataProps: dataPropType }) => {
                             </div>
 
                             <div className={`mt-3`}>
-                                <button className={`bg-[#181818] rounded-xl transition-all mt-4 w-full py-2`}>
+                                <button className={`bg-[#181818] hover:bg-indigo-600 font-semibold rounded-xl transition-all mt-4 w-full py-2`}>
                                     <h1>Login</h1>
                                 </button>
                             </div>

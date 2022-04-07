@@ -1,15 +1,15 @@
 const WebpackObfuscator = require("webpack-obfuscator");
 
 const prodplugins = [
-  new WebpackObfuscator({
-          controlFlowFlattening: true,
-          controlFlowFlatteningThreshold: 0.5,
-          deadCodeInjection: true,
-          debugProtection: true,
-          identifierNamesGenerator: "mangled",
-          selfDefending: true,
-          stringArrayEncoding: ['rc4', 'base64'],
-    })
+  // new WebpackObfuscator({
+  //         controlFlowFlattening: true,
+  //         controlFlowFlatteningThreshold: 0.5,
+  //         deadCodeInjection: true,
+  //         debugProtection: true,
+  //         identifierNamesGenerator: "mangled",
+  //         selfDefending: true,
+  //         stringArrayEncoding: ['rc4', 'base64'],
+  //   })
 ]
 const prodrules = [
 

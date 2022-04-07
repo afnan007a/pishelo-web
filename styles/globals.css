@@ -39,7 +39,7 @@ body {
   margin: 0;
   font-family: 'Lato', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    overflow: hidden !important;
+  overflow: hidden !important;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility !important;
   -webkit-user-select: none;
@@ -47,6 +47,8 @@ body {
   -moz-user-select: none;
   -o-user-select: none;
   user-select: none;
+  -ms-touch-action: manipulation;	/* IE10  */
+	touch-action: manipulation;		/* IE11+ */
 }
 
 a {
