@@ -39,6 +39,12 @@ body:
       placeholder: Drag and drop the screenshots/videos into this box.
     validations:
       required: false
+  - type: input
+    attributes:
+      label: Client Version
+      description: The version you encountered this bug on. This is shown at the bottom left of the settings page.
+    validations:
+      required: true
     - type: markdown
     attributes:
       value: |
