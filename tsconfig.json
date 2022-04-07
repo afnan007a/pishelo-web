@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "noImplicitAny": false,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "strictNullChecks": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "typeRoots": [
+      "node_modules/@types",
+      "constants/declarations"
+    ],
+    "paths": {
+      "@/clients/*": [
+        "clients/*"
+      ],
+      "@/assets/*": [
+        "public/assets/*"
+      ],
+      "@/constants/*": [
+        "constants/*"
+      ],
+      "@/public/*": [
+        "public/*"
+      ],
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/config/*": [
+        "config/*"
+      ],
+    },
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/projects/[projectid]/[projectid].tsx", "pages/api/socketio.js", "components/ErrorCatcher.jsx", "pages/_document.js", "constants/development.ts", "constants/customTypings/roundings.js"],
+  "exclude": ["node_modules"]
+}
