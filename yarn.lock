@@ -1880,7 +1880,7 @@
   "resolved" "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   "version" "2.0.0"
 
-"javascript-obfuscator@^2.8.0 || ^3.0.0 || ^4.0.0":
+"javascript-obfuscator@^2.8.0 || ^3.0.0 || ^4.0.0", "javascript-obfuscator@^4.0.0":
   "integrity" "sha512-vS/8w/9eKISzwXNLd+OLMCCwjD+dFMdOlCDOo919iR/MWdBs+7u1ybpwRoWOmODToPQKVYw5GasvZoIiPs5nPw=="
   "resolved" "https://registry.npmjs.org/javascript-obfuscator/-/javascript-obfuscator-4.0.0.tgz"
   "version" "4.0.0"
