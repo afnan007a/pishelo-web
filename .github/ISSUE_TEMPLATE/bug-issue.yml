@@ -28,6 +28,19 @@ body:
       required: true
   - type: textarea
     attributes:
+      label: Screenshots or videos
+      description: Add screenshots or videos that show the bug here.
+      placeholder: Drag and drop the screenshots/videos into this box.
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: Client Version
+      description: The version you encountered this bug on. This is shown at the bottom left of the settings page.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
       label: Debug Information
       description: Debug Logs can be found at [Pishelo Web Settings](https://pishelo.vercel.app/app/settings/developer/debug-logs)
     validations:
