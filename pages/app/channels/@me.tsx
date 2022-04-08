@@ -5,13 +5,18 @@ import { motion, useAnimation } from 'framer-motion'
 import { useRouter } from 'next/router'
 import Bottombar from '@/components/Bottombar'
 import Sidebar from '@/components/Sidebar'
+import LoadingScreen from '@/components/LoadingScreen'
 
-const App = ({ dataProps }: { dataProps: dataPropType }) => {
+const App = ({ dataProps }) => {
 
     const router = useRouter()
+    const { state: appReady, stateSetter: setAppReady } = dataProps.appReady
 
     return (
         <div className={`h-full min-h-screen w-full bg-[#242424] text-white`}>
+            <LoadingScreen
+                appReady={appReady}
+            />
             <div className={`h-full min-h-screen`}>
                 <Sidebar />
             </div>

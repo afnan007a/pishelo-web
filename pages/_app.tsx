@@ -3,12 +3,30 @@ import * as api from '@/clients/apiPublic'
 import { useEffect, useState } from 'react'
 import { dataPropType } from '@/constants/declarations/AppProps'
 import type { Users } from "@prisma/client";
+import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }) {
+
+  const router = useRouter()
+  // Requires
+  const needsUserAuth = [
+    '/app'
+  ]
+  
+  function checkIfNeed(array:Array<string>, url:string):boolean {
+    let result = false
+    array.forEach((path:string) => {
+      if (url.includes(path)) {
+        result = true
+      }
+    })
+    return result
+  }
   
   const [spotifyPlayer, setSpotifyPlayer] = useState<Spotify.Player | null>(null)
   const [currentContext, setCurrentContext] = useState<Spotify.PlaybackState | null>(null)
   const [userData, setUserData] = useState<Users | null>(null)
+  const [appReady, setAppReady] = useState<boolean>(false)
   const dataProps: dataPropType = {
     spotifyPlayer: {
       state: spotifyPlayer,
@@ -21,13 +39,40 @@ function MyApp({ Component, pageProps }) {
     userData: {
       state: userData,
       stateSetter: setUserData
+    },
+    appReady: {
+      state: appReady,
+      stateSetter: setAppReady
     }
   }
 
   useEffect(() => {
-    api.userData().then((userData) => {
-      setUserData(userData)
-    })
+    async function checkIfPageNeedsData(url) {
+      if (checkIfNeed(needsUserAuth, url)) {
+
+        const user = await api.checkIfAuth()
+        if (user) {
+          api.userData().then((userData) => {
+            setUserData(userData)
+            setAppReady(true)
+          })
+        }
+
+      }
+    }
+    checkIfPageNeedsData(router.pathname)
+
+    function handleRouteChange(url) {
+      checkIfPageNeedsData(url)
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method:
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
   }, [])
   
 

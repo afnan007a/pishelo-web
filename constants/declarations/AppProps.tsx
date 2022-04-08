@@ -11,5 +11,9 @@ export interface dataPropType {
     userData: {
         state: Users | null,
         stateSetter: (state: Users | null) => void
+    },
+    appReady: {
+        state: boolean,
+        stateSetter: (state: boolean) => void
     }
 }

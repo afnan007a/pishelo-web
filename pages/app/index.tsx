@@ -1,31 +1,14 @@
-import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
-import { dataPropType } from '@/constants/declarations/AppProps'
 import { motion, useAnimation } from 'framer-motion'
 import { useRouter } from 'next/router'
-import { checkIfAuth } from '@/clients/apiPublic'
+import { useEffect } from 'react'
 
-const App = ({ dataProps }: { dataProps: dataPropType }) => {
+const App = ({ dataProps }) => {
 
     const router = useRouter()
     const loadingAnimationControl = useAnimation()
 
     useEffect(() => {
-
-        checkIfAuth().then((isAuthenticated) => {
-            if (!isAuthenticated) {
-                router.push('/auth/login')
-                return
-            }
-        })
-
-        setTimeout(() => {
-            loadingAnimationControl.start({
-                opacity: 0
-            }).then(() => {
-                router.push('/app/channels/@me')
-            })
-        }, 1000);
+        router.replace('/app/channels/@me')
     }, [])
 
     return (
