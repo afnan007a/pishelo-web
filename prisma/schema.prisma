@@ -7,20 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Artists {
-  id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  created_at  DateTime? @default(now()) @db.Timestamptz(6)
-  name        String?
-  description String?
-}
-
-model Songs {
-  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  created_at DateTime? @default(now()) @db.Timestamptz(6)
-  name       String?
-  artists    String[]  @db.Uuid
-}
-
 model Users {
   id              String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   created_at      DateTime? @default(now()) @db.Timestamptz(6)
@@ -30,4 +16,22 @@ model Users {
   status          String    @default("online")
   userid          String?   @unique @db.Uuid
   lastseen        String
+}
+
+model Channels {
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  type       String?
+  messages   String[]  @unique
+  authorsid  String[]  @db.Uuid
+}
+
+model Messages {
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  content    String?
+  authorid   String?   @db.Uuid
+  type       String    @default("user")
+  embeds     Json[]
+  timestamp  String?
 }

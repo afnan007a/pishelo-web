@@ -51,6 +51,7 @@ export async function checkUserToken(accessToken: any): Promise<User> {
   return new Promise(async (resolve, reject) => {
     if (!accessToken) {
       reject({ code: 400, message: "Unauthenticated User" });
+      return
     }
 
     const auth = supabase.auth;

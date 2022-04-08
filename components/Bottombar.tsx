@@ -15,7 +15,7 @@ function BottomBar(
     const router = useRouter()
 
     return (
-        <div className={`w-full h-14 flex items-center absolute bottom-2 px-3`}>
+        <div className={`w-full h-14 flex items-center fixed bottom-2 px-3`}>
             <div className={`bg-[#191B1F] shadow-xl px-5 flex w-full h-full rounded-xl`}>
 
                 <div id="leftSideBar" className={`flex items-center h-full`}>
