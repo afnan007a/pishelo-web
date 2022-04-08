@@ -6,14 +6,17 @@ import { useRouter } from 'next/router'
 import Bottombar from '@/components/Bottombar'
 import Sidebar from '@/components/Sidebar'
 import LoadingScreen from '@/components/LoadingScreen'
+import Settings from '@/components/Settings'
 
 const App = ({ dataProps }) => {
 
     const router = useRouter()
     const { state: appReady, stateSetter: setAppReady } = dataProps.appReady
+    const { state: userData, stateSetter: setUserData } = dataProps.userData
+    
 
     return (
-        <div className={`h-full min-h-screen w-full bg-[#242424] text-white`}>
+        <div className={`h-full min-h-screen w-full bg-[#333842] text-white`}>
             <LoadingScreen
                 appReady={appReady}
             />
@@ -21,7 +24,9 @@ const App = ({ dataProps }) => {
                 <Sidebar />
             </div>
 
-            <Bottombar userData={dataProps.userData.state} />
+            <Bottombar
+            userData={dataProps.userData.state}
+            />
         </div>
     )
 }

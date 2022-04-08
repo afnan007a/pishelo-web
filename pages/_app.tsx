@@ -15,11 +15,12 @@ function MyApp({ Component, pageProps }) {
   
   function checkIfNeed(array:Array<string>, url:string):boolean {
     let result = false
-    array.forEach((path:string) => {
+    for (const path of array) {
       if (url.includes(path)) {
         result = true
+        break;
       }
-    })
+    }
     return result
   }
   
@@ -49,16 +50,15 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     async function checkIfPageNeedsData(url) {
       if (checkIfNeed(needsUserAuth, url)) {
-
         const user = await api.checkIfAuth()
         if (user) {
-          api.userData().then((userData) => {
-            setUserData(userData)
-            setAppReady(true)
-          })
+          const userData = await api.userData()
+          setUserData(userData)
+        } else {
+          router.push('/auth')
         }
-
       }
+      setAppReady(true)
     }
     checkIfPageNeedsData(router.pathname)
 

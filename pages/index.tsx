@@ -1,13 +1,20 @@
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 const Home: NextPage = (props) => {
 
   const router = useRouter()
 
+  useEffect(() => {
+    router.prefetch('/app')
+  }, [])
+  
+
   return (
     <div className={`h-full w-full min-h-screen`}>
-      <div id="header" className={`bg-blue-800 md:bg-transparent text-white shadow-md md:shadow-none fixed w-full h-14 flex items-center px-5 md:px-12 md:mt-2`}>
+      <div id="header" className={`text-white fixed w-full h-14 flex items-center px-5 md:px-12 mt-1 md:mt-2`}>
         <div id="leftside_header" className={`flex items-center h-full`}>
           <h1 className={`text-xl font-bold`}>Pishelchat</h1>
 

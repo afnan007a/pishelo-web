@@ -20,11 +20,15 @@ const App = ({ dataProps }) => {
     const router = useRouter()
 
     async function signUpForAccount() {
-        await userSignup({ email, password, username }).then((err) => {
-            setErrorMessage(`${err}` || 'Unknown error')
+        userSignup({ email, password, username })
+        .then(() => {
+            setShowEmailVerification(true)
+        })
+        .catch((err) => {
+            console.log(err)
+            setErrorMessage(`${err.reason}` || 'Unknown error')
             return
         })
-        setShowEmailVerification(true)
     }
 
     async function signInToAccount() {
