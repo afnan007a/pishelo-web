@@ -20,12 +20,18 @@ const App = ({ dataProps }) => {
             <LoadingScreen
                 appReady={appReady}
             />
-            <div className={`h-full min-h-screen`}>
-                <Sidebar />
+            <div className={`h-full flex min-h-screen w-full`}>
+                <Sidebar
+                    dataProps={dataProps}
+                />
+
+                <div className={`bg-orange-400 w-full h-full`}>
+                    <h1>hi</h1>
+                </div>
             </div>
 
             <Bottombar
-            userData={dataProps.userData.state}
+            dataProps={dataProps}
             />
         </div>
     )

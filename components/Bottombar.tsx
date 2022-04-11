@@ -2,17 +2,17 @@ import { ChatbubblesOutline, SearchCircleOutline, HomeOutline, CogOutline, Ellip
 import SmallDialog from './smallDialog'
 import type { Users } from "@prisma/client";
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import Settings from './Settings';
 import { useRouter } from 'next/router';
+import type { dataPropType } from '@/constants/declarations/AppProps'
 
 
 function BottomBar(
-    { userData }:
-    { userData: Users | null }
+    { dataProps }:
+    { dataProps: dataPropType }
 ) {
 
     const router = useRouter()
+    const { state:userData, stateSetter:setUserData } = dataProps.userData
 
     return (
         <div className={`w-full h-14 flex items-center fixed bottom-2 px-3`}>
@@ -75,7 +75,7 @@ function BottomBar(
                 <div id="rightSideBar" className={`h-full ml-auto flex`}>
                     <div id="profileData" className={`flex items-center py-1.5`}>
                         <div className={`h-full flex py-1`}>
-                            <img className={`h-full rounded-full`} src={`/assets/testAvatar.png`} />
+                            <img className={`h-full rounded-full`} src={`${userData?.avatarURL}`} />
                             <div className={`absolute bg-red-400 shadow-xl w-2 h-2 rounded-full`} />
                         </div>
                         <div className={`ml-2 hidden sm:block`}>

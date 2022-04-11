@@ -19,11 +19,14 @@ model Users {
 }
 
 model Channels {
-  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  created_at DateTime? @default(now()) @db.Timestamptz(6)
-  type       String?
-  messages   String[]  @unique
-  authorsid  String[]  @db.Uuid
+  id          String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  type        String?
+  messages    String[]  @unique
+  members     String[]  @db.Uuid
+  name        String?
+  description String?
+  created_by  String?   @db.Uuid
 }
 
 model Messages {
@@ -34,4 +37,5 @@ model Messages {
   type       String    @default("user")
   embeds     Json[]
   timestamp  String?
+  channelid  String?   @db.Uuid
 }

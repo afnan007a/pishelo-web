@@ -31,10 +31,11 @@ function AccountSettings({ dataProps }) {
 
     function backToChat() {
         settingsAnimationControl.start({
-            scale: 1.3
-        }).then(() => {
-            router.back()
+            scale: 1.2
         })
+        setTimeout(() => {
+            router.back()
+        }, 100);
     }
     
 

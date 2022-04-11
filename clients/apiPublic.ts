@@ -1,7 +1,8 @@
 import { serverAddress } from "@/constants/development";
 import { supabase } from "@/clients/supabasePublic";
 import querystring from "querystring";
-import type { Users } from "@prisma/client";
+import type { Users, Channels } from "@prisma/client";
+import type { TypeChannels } from '@/constants/database/Types'
 import { logIt } from ".";
 
 async function apifetch(
@@ -164,6 +165,37 @@ export const userSignup = async({ email, password, username }):Promise<any> => {
 export const userData = async (): Promise<Users> => {
   return new Promise(async (res, rej) => {
     const dt = await apifetch("/user/me", {
+      method: "GET",
+    }).catch((err) => {
+      rej(err);
+      return;
+    });
+    res(dt);
+  });
+};
+
+export const userDataMany = async (usersid:Array<string>): Promise<Array<Users>> => {
+  return new Promise(async (res, rej) => {
+
+    const usersparsed = usersid.join(",");
+
+    const dt = await apifetch("/user/fetch/many", {
+      method: "GET",
+      params: {
+        id: usersparsed,
+      },
+    }).catch((err) => {
+      rej(err);
+      return;
+    });
+    res(dt);
+  });
+};
+
+
+export const conversationData = async (): Promise<Array<TypeChannels>> => {
+  return new Promise(async (res, rej) => {
+    const dt = await apifetch("/channels/conversations", {
       method: "GET",
     }).catch((err) => {
       rej(err);

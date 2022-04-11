@@ -11,7 +11,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { channelid, accessToken } = req.query;
-  console.log('a')
   const authuser = await checkUserToken(accessToken);
 
   const fetcheduser = await prismaClient.users.findFirst({
@@ -21,13 +20,34 @@ export default async function handler(
   });
   const channels = await prismaClient.channels.findMany({
     where: {
-      authorsid: {
+      members: {
         hasSome: [(fetcheduser?.id as string)],
       },
     },
   });
+
+  let userstofetch:Array<string> = []
+  for (const conversation of channels) {
+      conversation.members.forEach((convomemberid) => {
+          userstofetch.push(convomemberid)
+      })
+  }
+  const usersdata = await prismaClient.users.findMany({
+    where: {
+      id: {
+        in: userstofetch,
+      },
+    },
+  });
+
   channels.forEach((channel) => {
-      const recipients = channel.authorsid.filter(authorid => authorid != fetcheduser?.id)
+    for (const memberid of channel.members) {
+      const parseduser = usersdata.find((user) => user.id == memberid);
+      if (parseduser) {
+        channel.members[memberid] = parseduser;
+      }
+    }
+      const recipients = channel.members.filter(authorid => authorid != fetcheduser?.id)
       channel["recipients"] = recipients;
   })
   prismaClient.$disconnect()
