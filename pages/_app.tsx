@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import * as api from '@/clients/apiPublic'
 import { useEffect, useState } from 'react'
 import { dataPropType } from '@/constants/declarations/AppProps'
-import type { Users } from "@prisma/client";
+import type { TypeUsers, TypeChannels } from '@/constants/database/Types'
 import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }) {
@@ -26,7 +26,9 @@ function MyApp({ Component, pageProps }) {
   
   const [spotifyPlayer, setSpotifyPlayer] = useState<Spotify.Player | null>(null)
   const [currentContext, setCurrentContext] = useState<Spotify.PlaybackState | null>(null)
-  const [userData, setUserData] = useState<Users | null>(null)
+  const [userData, setUserData] = useState<TypeUsers | null>(null)
+  const [usersData, setUsersData] = useState<Array<TypeUsers> | null>(null)
+  const [conversationsData, setConversationsData] = useState<Array<TypeChannels> | null>(null)
   const [appReady, setAppReady] = useState<boolean>(false)
   const dataProps: dataPropType = {
     spotifyPlayer: {
@@ -41,6 +43,14 @@ function MyApp({ Component, pageProps }) {
       state: userData,
       stateSetter: setUserData
     },
+    usersData: {
+      state: usersData,
+      stateSetter: setUsersData
+    },
+    conversationsData: {
+      state: conversationsData,
+      stateSetter: setConversationsData
+    },
     appReady: {
       state: appReady,
       stateSetter: setAppReady
@@ -48,31 +58,44 @@ function MyApp({ Component, pageProps }) {
   }
 
   useEffect(() => {
-    async function checkIfPageNeedsData(url) {
-      if (checkIfNeed(needsUserAuth, url)) {
-        const user = await api.checkIfAuth()
-        if (user) {
-          const userData = await api.userData()
-          setUserData(userData)
-        } else {
-          router.push('/auth')
-        }
+    (async () => {
+      const convodata = await api.conversationData()
+      let userstofetch: Array<string> = []
+      for (const conversation of convodata) {
+        conversation.members.forEach((convomemberid) => {
+          userstofetch.push(convomemberid)
+        })
       }
-      setAppReady(true)
-    }
-    checkIfPageNeedsData(router.pathname)
+      const users = await api.userDataMany(userstofetch)
+      setUsersData(users)
+      setConversationsData(convodata)
 
-    function handleRouteChange(url) {
-      checkIfPageNeedsData(url)
-    }
+      async function checkIfPageNeedsData(url) {
+        if (checkIfNeed(needsUserAuth, url)) {
+          const user = await api.checkIfAuth()
+          if (user) {
+            const userData = await api.userData()
+            setUserData(userData)
+          } else {
+            router.push('/auth')
+          }
+        }
+        setAppReady(true)
+      }
+      checkIfPageNeedsData(router.pathname)
 
-    router.events.on('routeChangeStart', handleRouteChange)
+      function handleRouteChange(url) {
+        checkIfPageNeedsData(url)
+      }
 
-    // If the component is unmounted, unsubscribe
-    // from the event with the `off` method:
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange)
-    }
+      router.events.on('routeChangeStart', handleRouteChange)
+
+      // If the component is unmounted, unsubscribe
+      // from the event with the `off` method:
+      return () => {
+        router.events.off('routeChangeStart', handleRouteChange)
+      }
+    })()
   }, [])
   
 

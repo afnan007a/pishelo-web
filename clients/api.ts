@@ -1,7 +1,9 @@
 import type { NextApiResponse } from "next";
 import { serverVersion } from "@/constants/development";
-import { supabase } from "@/clients/supabasePublic";
+import { supabase } from "@/clients/supabase";
 import type { User } from "@supabase/supabase-js";
+import type { TypeUsers } from '@/constants/database/Types'
+import { prismaClient } from "@/clients/prisma";
 
 export function rejectHandler(
   res: NextApiResponse,
@@ -51,6 +53,7 @@ export async function checkUserToken(accessToken: any): Promise<User> {
   return new Promise(async (resolve, reject) => {
     if (!accessToken) {
       reject({ code: 400, message: "Unauthenticated User" });
+      return
     }
 
     const auth = supabase.auth;
@@ -63,5 +66,50 @@ export async function checkUserToken(accessToken: any): Promise<User> {
       });
     }
     resolve(user);
+  });
+}
+
+export async function getUserData(id): Promise<TypeUsers> {
+  return new Promise(async (resolve, reject) => {
+    const userdata = await prismaClient.users.findFirst({
+      where: {
+        userid: id,
+      },
+    });
+
+    const avatardata = await supabase.storage
+      .from("avatars")
+      .createSignedUrl(userdata?.id as string, 86400);
+
+    const extradatas = {
+      avatarURL: avatardata.signedURL,
+    };
+    const toresolve = (userdata as TypeUsers);
+    Object.assign(toresolve, extradatas);
+    resolve(toresolve);
+  });
+}
+export async function getUserDataMany(ids): Promise<Array<TypeUsers>> {
+  return new Promise(async (resolve, reject) => {
+    const userdata = await prismaClient.users.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    for (const user of userdata) {
+      const avatardata = await supabase.storage
+        .from("avatars")
+        .createSignedUrl(user?.id as string, 86400);
+
+      const extradatas = {
+        avatarURL: avatardata.signedURL,
+      };
+      Object.assign(user, extradatas);
+    }
+    const toresolve = userdata as Array<TypeUsers>;
+    resolve(toresolve);
   });
 }

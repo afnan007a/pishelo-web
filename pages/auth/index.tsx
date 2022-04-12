@@ -6,6 +6,8 @@ const App = ({ dataProps }) => {
 
     const router = useRouter()
 
+    // how to iterate through every element in array
+
     useEffect(() => {
         if (!router.isReady) return
         
