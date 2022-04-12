@@ -1,6 +1,6 @@
 import { ChatbubblesOutline, SearchCircleOutline, HomeOutline, CogOutline, EllipsisHorizontalCircleOutline } from 'react-ionicons'
 import SmallDialog from './smallDialog'
-import type { Users } from "@prisma/client";
+import Link from 'next/link'
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import type { dataPropType } from '@/constants/declarations/AppProps'
@@ -21,20 +21,26 @@ function BottomBar(
                 <div id="leftSideBar" className={`flex items-center h-full`}>
                     {/* <h1 className={`font-black text-xl`}>Pishelo</h1> */}
                     <div id="toolbar" className={`flex items-center space-x-7`}>
-                        <div id="home_toolbar" className={`group`}>
-                            <SmallDialog
-                                text={`Home`}
-                            />
-                            <HomeOutline
-                                color={'#9CA3AF'}
-                                cssClasses={`hover:text-white`}
-                                height="28px"
-                                width="28px"
-                            />
-                        </div>
+                        <Link href={`/app`}>
+                            <div id="home_toolbar" className={`group flex justify-center`}>
+                                    <SmallDialog
+                                        align={'top'}
+                                        placement={'center'}
+                                        text={`Home`}
+                                    />
+                                    <HomeOutline
+                                        color={'#9CA3AF'}
+                                        cssClasses={`hover:text-white`}
+                                        height="28px"
+                                        width="28px"
+                                    />
+                            </div>
+                        </Link>
 
-                        <div id="directMessage_toolbar" className={`group hidden sm:block`}>
+                        <div id="directMessage_toolbar" className={`group hidden sm:flex justify-center`}>
                             <SmallDialog
+                                align={'top'}
+                                placement={'center'}
                                 text={`Direct Messages`}
                             />
                             <ChatbubblesOutline
@@ -45,8 +51,10 @@ function BottomBar(
                             />
                         </div>
 
-                        <div id="explore_toolbar" className={`group hidden sm:block`}>
+                        <div id="explore_toolbar" className={`group hidden sm:flex justify-center`}>
                             <SmallDialog
+                                align={'top'}
+                                placement={'center'}
                                 text={`Explore`}
                             />
                             <SearchCircleOutline
@@ -63,8 +71,10 @@ function BottomBar(
                     </div>
 
                     <div id="guilds" className={`h-full py-2 ml-5`}>
-                        <div className={`h-full w-fit group`}>
+                        <div className={`h-full w-fit group flex justify-center`}>
                             <SmallDialog
+                                align={'top'}
+                                placement={'center'}
                                 text={`lav's test server`}
                             />
                             <img className={`h-full hover:outline outline-2 outline-gray-400 outline-offset-2 rounded-xl`} src={`/assets/testAvatar.png`} />
@@ -89,8 +99,10 @@ function BottomBar(
                     </div>
 
                     <div className={`ml-5 h-full flex items-center space-x-5`}>
-                        <button onClick={() => router.push('/app/settings')} className={`group`}>
+                        <button onClick={() => router.push('/app/settings')} className={`group flex justify-center`}>
                             <SmallDialog
+                                align={'top'}
+                                placement={'center'}
                                 text={`Settings`}
                             />
                             <CogOutline
@@ -101,8 +113,10 @@ function BottomBar(
                             />
                         </button>
 
-                        <button className={`group hidden sm:block`}>
+                        <button className={`group hidden sm:flex justify-center`}>
                             <SmallDialog
+                            align={'top'}
+                            placement={'center'}
                             text={`More`}
                             />
                             <EllipsisHorizontalCircleOutline

@@ -34,7 +34,7 @@ function Sidebar({ dataProps }: { dataProps: dataPropType }) {
     }, [userData])
 
     return (
-        <div className={`bg-[#21252B] min-w-[245px] min-h-screen h-full flex flex-col px-5`}>
+        <div className={`bg-[#21252B] w-64 min-h-screen fixed h-full hidden sm:flex flex-col px-5`}>
             {/* <div className={`mt-8`}>
                 <div className={`px-3`}>
                     <h1 className={`text-[11px] font-black uppercase text-[#434A4A]`}>Pinned</h1>

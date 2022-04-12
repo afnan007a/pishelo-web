@@ -2,7 +2,8 @@ import { useRouter } from 'next/router'
 import Bottombar from '@/components/Bottombar'
 import Sidebar from '@/components/Sidebar'
 import LoadingScreen from '@/components/LoadingScreen'
-import { People, Search, Call } from 'react-ionicons'
+import { AtOutline, Search, Call, AddCircle, GiftOutline } from 'react-ionicons'
+import SmallDialog from '@/components/smallDialog'
 import type { dataPropType } from '@/constants/declarations/AppProps';
 
 export default function ChannelView({ dataProps }) {
@@ -25,37 +26,116 @@ export default function ChannelView({ dataProps }) {
                     dataProps={dataProps}
                 />
 
-                <div className={`w-full h-full px-2`}>
-                    <div className={`bg-[#21262c] mt-3 rounded-md w-full h-[52px] px-5 flex items-center`}>
-                        <div className={`flex items-center`}>
-                            <People
-                            color={`white`}
-                            width={`23px`}
-                            height={`23px`}
-                            />
+                <div className={`w-full h-full min-h-screen flex flex-col pb-[75px] sm:pl-64`}>
+                    <div className={`px-2`}>
+                        <div className={`bg-[#21262c] shadow-md mt-3 rounded-md w-full h-[52px] px-5 flex items-center`}>
+                            <div className={`flex items-center`}>
+                                <AtOutline
+                                cssClasses={`fill-gray-400 text-gray-400 transition-all`}
+                                width={`25px`}
+                                height={`25px`}
+                                />
 
-                            <div className={`ml-2 text-md`}>
-                                <h1 className={`font-black`}>{recipientData?.username || 'Loading User'}</h1>
-                                <h1 className={`text-[11px] -mt-1`}>{recipientData?.activityMessage || 'Loading Activity'}</h1>
+                                <div className={`ml-2 text-md`}>
+                                    <div className={`flex items-center`}>
+                                            <h1 className={`font-black`}>{recipientData?.username || 'Loading User'}</h1>
+
+                                        <div className={`group flex justify-center`}>
+                                            <SmallDialog
+                                                text={`Do Not Disturb`}
+                                                align={`bottom`}
+                                                placement={`center`}
+                                            />
+                                            <div className={`bg-red-500 ml-1 w-2 h-2 rounded-full`} />
+                                        </div>
+                                    </div>
+                                    <h1 className={`text-[11px] -mt-1`}>{recipientData?.activityMessage || 'Loading Activity'}</h1>
+                                </div>
+                            </div>
+
+                            <div className={`ml-auto`}>
+                                <div className={`flex items-center space-x-5`}>
+                                    <button className={`group flex justify-center`}>
+                                        <SmallDialog
+                                        text={`Start Voice Call`}
+                                        align={`bottom`}
+                                        placement={`right`}
+                                        />
+                                        <Call
+                                            cssClasses={`fill-gray-400 text-gray-400 hover:fill-white hover:text-white transition-all`}
+                                            width={`23px`}
+                                            height={`23px`}
+                                        />
+                                    </button>
+                                    <button className={`group flex justify-center`}>
+                                        <SmallDialog
+                                            text={`Search`}
+                                            align={`bottom`}
+                                            placement={`right`}
+                                        />
+                                        <Search
+                                            cssClasses={`fill-gray-400 text-gray-400 hover:fill-white hover:text-white transition-all`}
+                                            width={`23px`}
+                                            height={`23px`}
+                                        />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mainChatContent" className={`mt-auto w-full h-full`}>
+                        <div className={`pb-5`}>
+                            <div id="chatWelcome" className={`pb-5 px-5`}>
+                                <h1 className={`text-3xl font-black`}>{recipientData?.username || 'Loading User'}</h1>
+                                <h3 className={`text-sm mt-1 text-gray-400`}>This is the start to another magical conversation of yours.</h3>
+                            </div>
+
+                            <div id="chatContent">
+                                <div className={`w-full h-14 flex items-center py-2 px-5 transition-all hover:bg-slate-700`}>
+                                    <img className={`h-full rounded-full`} src={`${recipientData?.avatarURL}`} />
+
+                                    <div className={`ml-3`}>
+                                        <h1 className={`text-md font-bold`}>Afnan</h1>
+                                        <h1 className={`text-[13px] -mt-[1.5px] text-gray-300`}>Test test here</h1>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div className={`ml-auto`}>
-                            <div className={`flex items-center space-x-5`}>
-                                <button>
-                                    <Call
-                                        color={`white`}
-                                        width={`23px`}
-                                        height={`23px`}
+                        <div id="chatControls" className={`w-full h-12 px-4`}>
+                            <div className={`bg-[#22242B] shadow-md w-full h-full rounded-xl px-4 flex items-center`}>
+                                <div className={`h-full flex items-center`}>
+                                    <button>
+                                        <AddCircle
+                                            cssClasses={`fill-gray-500 text-gray-500 hover:fill-white hover:text-white transition-all`}
+                                            width={`25px`}
+                                            height={`25px`}
+                                        />
+                                    </button>
+                                </div>
+
+                                <div className={`ml-5 flex items-center h-full relative w-full`}>
+                                    <input
+                                        className={`bg-transparent text-sm font-medium text-[#DBDCDD] outline-none w-full`}
+                                    placeholder={`Message @${recipientData?.username || 'Loading User'}`}
                                     />
-                                </button>
-                                <button>
-                                    <Search
-                                        color={`white`}
-                                        width={`23px`}
-                                        height={`23px`}
-                                    />
-                                </button>
+                                </div>
+
+                                <div className={`ml-auto pl-5 justify-end flex items-center h-full w-fit`}>
+                                    <button className={`group flex justify-center`}>
+                                        <SmallDialog
+                                            align={'top'}
+                                            placement={'right'}
+                                            text={`Gift Jetpack to ${recipientData?.username || 'Loading User'}`}
+                                        />
+                                        <GiftOutline
+                                            cssClasses={`fill-gray-500 text-gray-500 hover:fill-white hover:text-white transition-all`}
+                                            width={`25px`}
+                                            height={`25px`}
+                                        />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
