@@ -20,7 +20,6 @@ export default async function handler(
     })
 
   const userdata = await getUserData(userFromAccToken.id);
-  console.log(userdata);
   prismaClient.$disconnect()
 
   resolveHandler(res, {

@@ -2,7 +2,7 @@ import { serverAddress } from "@/constants/development";
 import { supabase } from "@/clients/supabasePublic";
 import querystring from "querystring";
 import type { Users, Channels } from "@prisma/client";
-import type { TypeChannels } from '@/constants/database/Types'
+import type { TypeChannels, TypeMessages } from "@/constants/database/Types";
 import { logIt } from ".";
 
 async function apifetch(
@@ -197,6 +197,33 @@ export const conversationData = async (): Promise<Array<TypeChannels>> => {
   return new Promise(async (res, rej) => {
     const dt = await apifetch("/channels/conversations", {
       method: "GET",
+    }).catch((err) => {
+      rej(err);
+      return;
+    });
+    res(dt);
+  });
+};
+
+export const messagesMany = async (channelid): Promise<Array<TypeMessages>> => {
+  return new Promise(async (res, rej) => {
+    const dt = await apifetch(`/channels/${channelid}/messages`, {
+      method: "GET",
+    }).catch((err) => {
+      rej(err);
+      return;
+    });
+    res(dt);
+  });
+};
+
+export const sendMessage = async (channelid, messageContent): Promise<Array<TypeMessages>> => {
+  return new Promise(async (res, rej) => {
+    const dt = await apifetch(`/channels/${channelid}/messages`, {
+      method: "POST",
+      body: {
+        content: messageContent,
+      }
     }).catch((err) => {
       rej(err);
       return;

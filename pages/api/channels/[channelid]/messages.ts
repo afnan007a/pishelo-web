@@ -1,5 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { checkUserToken, rejectHandler, resolveHandler } from "@/clients/api";
+import {
+  checkUserToken,
+  rejectHandler,
+  resolveHandler,
+  getUserData,
+} from "@/clients/api";
 import { prismaClient } from "@/clients/prisma";
 import { supabase } from "@/clients/supabase";
 import { serverAddress } from "@/constants/development";
@@ -13,6 +18,14 @@ export default async function handler(
   const { channelid, accessToken } = req.query
   const user = await checkUserToken(accessToken);
 
+  const userData = await getUserData(user.id);
+  if (!userData)
+    return rejectHandler(res, {
+      code: "rejected/user_not_found",
+      reason: "User not found",
+      status: 404,
+    });
+
   const channel = await prismaClient.channels.findFirst({
     where: {
       id: channelid.toString(),
@@ -25,13 +38,14 @@ export default async function handler(
   })
 
   if (req.method == 'POST') {
-    const { content } = req.body;
+    const { content } = JSON.parse(req.body);
 
     const createdmessage = await prismaClient.messages.create({
       data: {
-        authorid: user.id,
+        authorid: userData.id,
         timestamp: Date.now().toString(),
         content: content,
+        channelid: channelid.toString(),
       },
     });
     const channelafterupdated = await prismaClient.channels.update({

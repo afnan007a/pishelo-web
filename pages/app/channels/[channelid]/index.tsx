@@ -4,17 +4,37 @@ import Sidebar from '@/components/Sidebar'
 import LoadingScreen from '@/components/LoadingScreen'
 import { AtOutline, Search, Call, AddCircle, GiftOutline } from 'react-ionicons'
 import SmallDialog from '@/components/smallDialog'
-import type { dataPropType } from '@/constants/declarations/AppProps';
+import * as api from '@/clients/apiPublic'
+import type { TypeMessages } from '@/constants/database/Types';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ChannelView({ dataProps }) {
 
     const router = useRouter()
+    const [messages, setMessages] = useState<Array<TypeMessages>>([])
     const { state: appReady, stateSetter: setAppReady } = dataProps.appReady
     const { state: userData, stateSetter: setUserData } = dataProps.userData
     const { state: usersData, stateSetter: setUsersData } = dataProps.usersData
     const { state: conversationsData, stateSetter: setConversationsData } = dataProps.conversationsData
     const currentConversationData = conversationsData?.find((convo) => convo.id == router.query['channelid'])
     const recipientData = usersData?.find((userdata) => userdata.id == currentConversationData.recipients[0])
+
+    function sendMessage(event) {
+        if (event?.key == 'Enter') {
+            console.log(currentConversationData)
+            api.sendMessage(currentConversationData.id, event.target.value)
+            event.target.value = ''
+        }
+    }
+
+    useEffect(() => {
+        if (!router.isReady || !recipientData) return
+        (async () => {
+            const messagesinchannel = await api.messagesMany(router.query['channelid'])
+            setMessages(messagesinchannel)
+        })()
+    }, [router.isReady, recipientData])
 
     return (
         <div className={`h-full flex min-h-screen w-full bg-[#333842] text-white`}>
@@ -91,15 +111,25 @@ export default function ChannelView({ dataProps }) {
                                 <h3 className={`text-sm mt-1 text-gray-400`}>This is the start to another magical conversation of yours.</h3>
                             </div>
 
-                            <div id="chatContent">
-                                <div className={`w-full h-14 flex items-center py-2 px-5 transition-all hover:bg-slate-700`}>
-                                    <img className={`h-full rounded-full`} src={`${recipientData?.avatarURL}`} />
+                            <div id="chatContent" className={`space-y-1`}>
+                                {(() => {
+                                    return messages.map((message) => {
 
-                                    <div className={`ml-3`}>
-                                        <h1 className={`text-md font-bold`}>Afnan</h1>
-                                        <h1 className={`text-[13px] -mt-[1.5px] text-gray-300`}>Test test here</h1>
-                                    </div>
-                                </div>
+                                        const user = usersData?.find((userdata) => userdata.id == message.authorid)
+                                        console.log(user)
+
+                                        return (
+                                            <div key={`message_${message.id}`} className={`w-full h-14 flex items-center py-2 px-5 transition-all hover:bg-slate-700`}>
+                                                <img className={`h-full rounded-full`} src={`${user?.avatarURL}`} />
+
+                                                <div className={`ml-3`}>
+                                                    <h1 className={`text-md font-bold`}>{user?.username || 'Username not available'}</h1>
+                                                    <h1 className={`text-[13px] -mt-[1.5px] text-gray-300`}>{message?.content || '~Message content not available~'}</h1>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                })()} 
                             </div>
                         </div>
 
@@ -117,8 +147,9 @@ export default function ChannelView({ dataProps }) {
 
                                 <div className={`ml-5 flex items-center h-full relative w-full`}>
                                     <input
-                                        className={`bg-transparent text-sm font-medium text-[#DBDCDD] outline-none w-full`}
+                                    className={`bg-transparent text-sm font-medium text-[#DBDCDD] outline-none w-full`}
                                     placeholder={`Message @${recipientData?.username || 'Loading User'}`}
+                                    onKeyDown={(event) => sendMessage(event)}
                                     />
                                 </div>
 
