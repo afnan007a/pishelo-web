@@ -1,6 +1,7 @@
 import { motion, useAnimation } from 'framer-motion'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { supabase } from '@/clients/supabasePublic'
 
 const App = ({ dataProps }) => {
 
@@ -8,7 +9,12 @@ const App = ({ dataProps }) => {
     const loadingAnimationControl = useAnimation()
 
     useEffect(() => {
-        router.replace('/app/channels/@me')
+        const user = supabase.auth.user()
+        if (!user) {
+            router.push('/auth')
+            return
+        }
+        window.location.href = '/app/channels/@me'
     }, [])
 
     return (

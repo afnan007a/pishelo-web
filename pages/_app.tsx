@@ -4,10 +4,52 @@ import { useEffect, useState } from 'react'
 import { dataPropType } from '@/constants/declarations/AppProps'
 import type { TypeUsers, TypeChannels } from '@/constants/database/Types'
 import { useRouter } from 'next/router';
+import { logIt } from "@/clients/index";
+import Tracker from '@openreplay/tracker/cjs';
+
+const tracker = new Tracker({
+  projectKey: (process.env['OPENREPLAY_KEY'] as string),
+  revID: '1',
+  __DISABLE_SECURE_MODE: true,
+  __debug__: true,
+  verbose: true,
+  captureExceptions: true,
+  captureIFrames: true,
+  connAttemptCount: 16,
+  connAttemptGap: 5000,
+  respectDoNotTrack: false,
+  obscureTextEmails: false,
+  obscureTextNumbers: false,
+  obscureInputEmails: false,
+});
 
 function MyApp({ Component, pageProps }) {
 
   const router = useRouter()
+  // Tracker
+  useEffect(() => {
+    tracker.start();
+  }, []);
+
+
+  // Register service worker
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/sw.js").then(
+          async function (registration) {
+            await window.Notification.requestPermission();
+            console.log("Service Worker registration successful with scope: ", registration.scope);
+          },
+          function (err) {
+            console.log("Service Worker registration failed: ", err);
+          }
+        );
+      });
+    }
+  }, [])
+
+
   // Requires
   const needsUserAuth = [
     '/app'
@@ -30,6 +72,42 @@ function MyApp({ Component, pageProps }) {
   const [usersData, setUsersData] = useState<Array<TypeUsers> | null>(null)
   const [conversationsData, setConversationsData] = useState<Array<TypeChannels> | null>(null)
   const [appReady, setAppReady] = useState<boolean>(false)
+  const [cacheData, setCacheData] = useState<Object>({})
+
+  function updateCache(key, data) {
+
+    let tempCache = cacheData
+    tempCache[key] = data
+
+    logIt(`Updating cache with key: ${key}`, {
+      level: `info`,
+      source: 'app_updateCache',
+      raw: {
+        key,
+        afterdata: tempCache
+      }
+    })
+
+    setCacheData(tempCache)
+    return tempCache
+  }
+  function getCache(key) {
+
+    const cached = cacheData[key]
+
+    logIt(`Getting cache with key: ${key}`, {
+      level: `info`,
+      source: 'app_updateCache',
+      raw: {
+        key,
+        data: cached
+      }
+    })
+
+    if (!cached) return false
+    return cached
+  }
+
   const dataProps: dataPropType = {
     spotifyPlayer: {
       state: spotifyPlayer,
@@ -54,6 +132,10 @@ function MyApp({ Component, pageProps }) {
     appReady: {
       state: appReady,
       stateSetter: setAppReady
+    },
+    cacheManager: {
+      getCache: getCache,
+      updateCache: updateCache,
     }
   }
 

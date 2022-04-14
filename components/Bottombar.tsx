@@ -21,7 +21,7 @@ function BottomBar(
                 <div id="leftSideBar" className={`flex items-center h-full`}>
                     {/* <h1 className={`font-black text-xl`}>Pishelo</h1> */}
                     <div id="toolbar" className={`flex items-center space-x-7`}>
-                        <Link href={`/app`}>
+                        <Link href={`/app/channels/@me`}>
                             <div id="home_toolbar" className={`group flex justify-center`}>
                                     <SmallDialog
                                         align={'top'}
