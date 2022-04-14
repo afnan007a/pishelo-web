@@ -23,5 +23,9 @@ export interface dataPropType {
     appReady: {
         state: boolean,
         stateSetter: (state: boolean) => void
+    },
+    cacheManager: {
+        getCache: (key: string) => any,
+        updateCache: (key: string, data: any) => any,
     }
 }

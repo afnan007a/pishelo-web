@@ -3,13 +3,23 @@ import Bottombar from '@/components/Bottombar'
 import Sidebar from '@/components/Sidebar'
 import LoadingScreen from '@/components/LoadingScreen'
 import { BugOutline, CogOutline, ColorWandOutline, CompassOutline, MoonOutline, PlanetOutline, Settings } from 'react-ionicons'
-
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/clients/supabasePublic'
 
 const App = ({ dataProps }) => {
 
     const router = useRouter()
     const { state: appReady, stateSetter: setAppReady } = dataProps.appReady
     const { state: userData, stateSetter: setUserData } = dataProps.userData
+
+    useEffect(() => {
+        const user = supabase.auth.user()
+        if (!user) {
+            router.push('/auth')
+            return
+        }
+    }, [])
     
 
     return (

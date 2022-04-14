@@ -42,7 +42,7 @@ body {
 
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility !important;
-
+  overflow: auto;
 }
 
 a {

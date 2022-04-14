@@ -65,7 +65,7 @@ function Sidebar({ dataProps }: { dataProps: dataPropType }) {
                             return (
                                 <Link key={`dm_${recipient?.id}`} href={`/app/channels/${convodata.id}`}>
                                     <button className={`flex text-left w-full items-center hover:bg-[#42464E] group px-3 py-1 rounded-xl`}>
-                                        <img className={`w-9 rounded-full`} src={`${recipient?.avatarURL}`} />
+                                        <img className={`w-9 h-9 rounded-full object-cover`} src={`${recipient?.avatarURL}`} />
 
                                         <div className={`text-[#96989E] group-hover:text-gray-200 ml-3`}>
                                             <h1 className={`text-sm font-black text-white`}>{recipient?.username}</h1>
