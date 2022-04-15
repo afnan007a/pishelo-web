@@ -67,9 +67,7 @@ export default async function handler(
   if (req.method == 'GET') {
     const messages = await prismaClient.messages.findMany({
       where: {
-        id: {
-          in: channel!.messages,
-        },
+        channelid: channelid.toString(),
       },
     });
     prismaClient.$disconnect();

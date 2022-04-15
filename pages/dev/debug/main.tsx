@@ -8,10 +8,6 @@ export default function AuthDetails(props) {
 
     const authModule = supabaseClient.supabase.auth
 
-    useEffect(() => {
-        console.log('abcdd')
-    }, [])
-    
 
     function updateUserDataInScreen() {
         const userdetails:any = authModule.user()

@@ -1,4 +1,4 @@
-import { PeopleOutline, ColorWandOutline, ShieldCheckmarkOutline, HelpCircle, AtCircleOutline, MailOutline, KeyOutline, CloseCircleOutline, KeypadOutline } from 'react-ionicons'
+import { PeopleOutline, ColorWandOutline, ShieldCheckmarkOutline, HelpCircle, AtCircleOutline, MailOutline, KeyOutline, CloseCircleOutline, KeypadOutline, PhonePortraitOutline } from 'react-ionicons'
 import { supabase } from '@/clients/supabasePublic'
 import type { User } from '@supabase/supabase-js'
 import * as React from 'react';
@@ -179,16 +179,16 @@ function AccountSettings({ dataProps }) {
                                 </div>  
 
                                 <div className={`bg-[#202225] w-full h-full rounded-xl flex items-center px-3 py-2`}>
-                                    <KeyOutline
+                                    <PhonePortraitOutline
                                         color={'#fff'}
                                         height="25px"
                                         width="25px"
                                     />
                                     <div className={`ml-2`}>
-                                        <h1 className={`font-bold text-sm text-gray-200`}>Password</h1>
-                                        <h1 className={`text-[12.5px]`}>{(passwordHidden ? '········' : 'nah we dont store passwords.') || 'Loading Email'}</h1>
-                                        <button onClick={() => setPasswordHidden(!passwordHidden)} className={`text-blue-300 text-xs mt-1`}>
-                                            <h1>{passwordHidden ? 'Reveal' : 'Hide'}</h1>
+                                        <h1 className={`font-bold text-sm text-gray-200`}>Phone Number</h1>
+                                            <h1 className={`text-[12.5px]`}>········</h1>
+                                        <button className={`text-blue-300 text-xs mt-1`}>
+                                            <h1>Reveal</h1>
                                         </button>
                                     </div>
                                 </div>  

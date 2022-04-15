@@ -54,7 +54,6 @@ export default async function handler(
     }
   );
   if (!newuser.user) {
-    console.log(newuser, email, password)
     rejectHandler(res, {
       code: "rejected/user_signup_fail",
       reason: "A error occured while signing up and the process could not be completed",
