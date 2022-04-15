@@ -68,8 +68,8 @@ function Sidebar({ dataProps }: { dataProps: dataPropType }) {
                                         <img className={`w-9 h-9 rounded-full object-cover`} src={`${recipient?.avatarURL}`} />
 
                                         <div className={`text-[#96989E] group-hover:text-gray-200 ml-3`}>
-                                            <h1 className={`text-sm font-black text-white`}>{recipient?.username}</h1>
-                                            <h1 className={`text-[11px] font-medium w-32 overflow-hidden whitespace-nowrap text-ellipsis`}>{recipient?.activityMessage}</h1>
+                                            <h1 className={`text-sm font-semibold text-white`}>{recipient?.username}</h1>
+                                            <h1 className={`text-[10px] font-medium w-32 overflow-hidden whitespace-nowrap text-ellipsis`}>{recipient?.activityMessage}</h1>
                                         </div>
                                     </button>
                                 </Link>

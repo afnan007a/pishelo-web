@@ -8,7 +8,7 @@ import { logIt } from "@/clients/index";
 import Tracker from '@openreplay/tracker/cjs';
 
 const tracker = new Tracker({
-  projectKey: (process.env['OPENREPLAY_KEY'] as string),
+  projectKey: (process.env['NEXT_PUBLIC_OPENREPLAY_KEY'] as string),
   revID: '1',
   __DISABLE_SECURE_MODE: true,
   __debug__: true,

@@ -25,7 +25,6 @@ const App = ({ dataProps }) => {
             setShowEmailVerification(true)
         })
         .catch((err) => {
-            console.log(err)
             setErrorMessage(`${err.reason}` || 'Unknown error')
             return
         })

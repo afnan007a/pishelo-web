@@ -9,11 +9,13 @@ import type { TypeMessages } from '@/constants/database/Types';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { dataPropType } from '@/constants/declarations/AppProps'
+import { fetchMessages, getMessagesCache } from '@/managers/messages'
+import HomeHeader from '@/components/HomeHeader'
 
 export default function ChannelView({ dataProps }) {
 
     const router = useRouter()
-    const [messages, setMessages] = useState<Array<TypeMessages>>([])
+    const [messages, setMessages] = useState<Array<TypeMessages> | null>(null)
     const { getCache, updateCache } = dataProps.cacheManager
     const { state: appReady, stateSetter: setAppReady } = dataProps.appReady
     const { state: userData, stateSetter: setUserData } = dataProps.userData
@@ -25,8 +27,7 @@ export default function ChannelView({ dataProps }) {
     async function sendMessage(event) {
         if (event?.key == 'Enter') {
             const value = event.target.value
-            const messagesTemp = messages
-            messagesTemp.push({
+            messages?.push({
                 authorid: userData.id,
                 channelid: currentConversationData.id,
                 content: value,
@@ -36,7 +37,7 @@ export default function ChannelView({ dataProps }) {
                 timestamp: Date.now().toString(),
                 type: 'user'
             })
-            setMessages(messagesTemp)
+            setMessages(messages)
 
             await api.sendMessage(currentConversationData.id, value)
             event.target.value = ''
@@ -45,17 +46,27 @@ export default function ChannelView({ dataProps }) {
 
     useEffect(() => {
         if (!router.isReady || !recipientData) return
+        let pageActive = true
+
+        const handleRouteChange = (url, { shallow }) => {
+            if (url == router.asPath) return
+            setMessages(null)
+        }
+        router.events.on('routeChangeStart', handleRouteChange);
+
         (async () => {
             const channelid = router.query['channelid']
-            const messagesincache = getCache(`messages_${channelid}`)
-            if (messagesincache) {
-                setMessages(messagesincache)
-                return
-            }
-            const messagesinchannel = await api.messagesMany(channelid)
+            const messagesinchannel = await fetchMessages({ channelid: channelid })
+            if (!pageActive) return
             setMessages(messagesinchannel)
-            updateCache(`messages_${channelid}`, messagesinchannel)
+            var objDiv = document.getElementById("mainChatContent");
+            objDiv!.scrollTop = objDiv!.scrollHeight;
         })()
+
+        return () => {
+            pageActive = false
+            router.events.off('routeChangeStart', handleRouteChange);
+        }
     }, [router.isReady, recipientData])
 
     return (
@@ -70,7 +81,7 @@ export default function ChannelView({ dataProps }) {
 
                 <div className={`w-full h-full min-h-screen flex flex-col pb-[75px] sm:pl-64`}>
                     <div className={`px-5`}>
-                        <div className={`fixed bg-[#21262c] shadow-md mt-3 rounded-md w-full h-[52px] px-5 flex items-center`}>
+                        <div className={`fixed bg-[#21262c] shadow-md mt-3 rounded-md w-[calc(100%-295px)] h-[55px] px-5 flex items-center`}>
                             <div className={`flex items-center`}>
                                 <AtOutline
                                 cssClasses={`fill-gray-400 text-gray-400 transition-all`}
@@ -130,35 +141,41 @@ export default function ChannelView({ dataProps }) {
                         <div className={`pb-16 pt-24`}>
                             <div id="chatWelcome" className={`pb-5 px-5`}>
                                 <img className={`h-16 w-16 object-cover rounded-full`} src={`${recipientData?.avatarURL}`} />
-                                <div className={`mt-2`}>
+                                <div className={`mt-3.5`}>
                                     <h1 className={`text-3xl font-black`}>{recipientData?.username || 'Loading User'}</h1>
-                                    <h3 className={`text-sm mt-1 text-gray-400`}>This is the start to another magical conversation of yours with @{recipientData?.username || 'Loading User'}.</h3>
+                                    <h3 className={`text-sm mt-1 text-gray-400 font-medium`}>This is the start to another magical conversation of yours with @{recipientData?.username || 'Loading User'}.</h3>
                                 </div>
 
                                 <div className={`mt-4 flex space-x-3`}>
-                                    <button className={`bg-gray-500 hover:bg-gray-600 transition-all text-white font-bold py-0.5 px-3 rounded-lg`}>
+                                    <button className={`bg-gray-500 hover:bg-gray-600 transition-all text-white font-semibold py-1 px-3 rounded-lg`}>
                                         <h1 className={`text-sm`}>Report Spam</h1>
                                     </button>
 
-                                    <button className={`bg-red-400 hover:bg-red-500 transition-all text-white font-bold py-0.5 px-3 rounded-lg`}>
+                                    <button className={`bg-red-400 hover:bg-red-500 transition-all text-white font-semibold py-1 px-3 rounded-lg`}>
                                         <h1 className={`text-sm`}>Block User</h1>
                                     </button>
                                 </div>
                             </div>
 
-                            <div id="chatContent" className={`space-y-1`}>
+                            <div id="chatContent" className={`space-y-1 mt-3`}>
                                 {(() => {
-                                    return messages.map((message) => {
+
+                                    if (messages == null) {
+                                        return (
+                                            <></>
+                                        )
+                                    }
+
+                                    return messages!.map((message) => {
 
                                         const user = usersData?.find((userdata) => userdata.id == message.authorid)
-                                        console.log(user)
 
                                         return (
                                             <div key={`message_${message.id}`} className={`w-full h-14 flex items-center py-2 px-5 transition-all hover:bg-slate-700`}>
                                                 <img className={`h-full w-fit rounded-full aspect-square object-cover`} src={`${user?.avatarURL}`} />
 
                                                 <div className={`ml-3`}>
-                                                    <h1 className={`text-md font-bold`}>{user?.username || 'Username not available'}</h1>
+                                                    <h1 className={`text-sm font-semibold`}>{user?.username || 'Username not available'}</h1>
                                                     <h1 className={`text-[13px] -mt-[1.5px] text-gray-300`}>{message?.content || '~Message content not available~'}</h1>
                                                 </div>
                                             </div>
@@ -168,8 +185,8 @@ export default function ChannelView({ dataProps }) {
                             </div>
                         </div>
 
-                        <div id="chatControls" className={`w-full h-fu px-4 fixed bottom-[120px] bg-orange-200`}>
-                            <div className={`bg-[#22242B] fixed shadow-md w-80 h-12 rounded-xl px-4 flex items-center`}>
+                        <div id="chatControls" className={`w-[calc(100%-256px)] px-4 fixed bottom-[75px]`}>
+                            <div className={`bg-[#22242B] shadow-md w-full h-12 rounded-xl px-4 flex items-center`}>
                                 <div className={`h-full flex items-center`}>
                                     <button>
                                         <AddCircle
